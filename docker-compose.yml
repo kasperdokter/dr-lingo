@@ -8,12 +8,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5433:5432"
   web:
     build: .
-    ports:
-      - "5000:5000"
     depends_on:
       - db
     environment:
