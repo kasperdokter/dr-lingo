@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Word Pair</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Create a New Word Pair</h1>
+        <form action="{{ url_for('create') }}" method="post">
+            <label for="english">English Word:</label><br>
+            <input type="text" id="english" name="english" required><br>
+
+            <label for="dutch">Dutch Word:</label><br>
+            <input type="text" id="dutch" name="dutch" required><br>
+
+            <input type="submit" value="Create">
+        </form>
+        <br>
+        <a href="{{ url_for('words') }}">Back to Word Pairs</a>
+    </div>
+</body>
+</html>

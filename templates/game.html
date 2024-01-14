@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Word Translation Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Word Translation Game</h1>
+        {% if feedback %}
+            <p>{{ feedback }}</p>
+        {% endif %}
+        <form action="{{ url_for('index') }}" method="post">
+            <p>Translate this word: <strong>{{ word_to_translate }}</strong></p>
+            <input type="hidden" name="word_to_translate" value="{{ word_to_translate }}">
+            <input type="hidden" name="correct_answer" value="{{ correct_answer }}">
+            <input type="hidden" name="pair_id" value="{{ pair_id }}">
+            <input type="hidden" name="language" value="{{ language }}">
+            <input type="text" name="user_answer" autocomplete="off" autofocus>
+            <input type="submit" value="Check Answer">
+        </form>
+        <br>
+        <a href="{{ url_for('words') }}">View all words</a>
+    </div>
+</body>
+</html>

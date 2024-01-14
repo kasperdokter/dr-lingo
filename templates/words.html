@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Word Pairs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('index') }}">Play the Game</a>
+        <h1>Word Pairs</h1>
+        <table>
+            <tr>
+                <th>English Word</th>
+                <th>Dutch Word</th>
+                <th>English Asked Count</th>
+                <th>English Correct Count</th>
+                <th>Dutch Asked Count</th>
+                <th>Dutch Correct Count</th>
+                <th>Actions</th>
+            </tr>
+            {% for pair in pairs %}
+            <tr>
+                <td>{{ pair.english_word }}</td>
+                <td>{{ pair.dutch_word }}</td>
+                <td>{{ pair.english_asked_count }}</td>
+                <td>{{ pair.english_correct_count }}</td>
+                <td>{{ pair.dutch_asked_count }}</td>
+                <td>{{ pair.dutch_correct_count }}</td>
+                <td>
+                    <form action="{{ url_for('update', id=pair.id) }}" method="get">
+                        <input type="submit" value="Update">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <a href="{{ url_for('create') }}">Create a New Pair</a>
+    </div>
+</body>
+</html>
