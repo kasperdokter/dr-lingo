@@ -4,6 +4,7 @@ body {
     padding: 0;
     background-color: #f4f4f4;
 }
+
 .container {
     width: 80%;
     margin: 20px auto;
@@ -13,20 +14,24 @@ body {
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
     overflow: hidden;
 }
+
 table {
     width: 100%;
     margin: 20px 0;
     border-collapse: collapse;
 }
+
 th, td {
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
+
 th {
     background-color: #333;
     color: #fff;
 }
+
 a {
     padding: 10px 20px;
     background-color: #007BFF;
@@ -36,12 +41,14 @@ a {
     cursor: pointer;
     text-decoration: none;
 }
+
 @media (min-width: 600px) {
     .container {
         width: 75%;
         margin: 40px auto; /* Increase vertical margins for larger screens */
     }
 }
+
 @media (min-width: 900px) {
     .container {
         width: 60%;
@@ -87,4 +94,32 @@ form input[type="submit"]:hover {
 
 a:hover {
     color: #0056b3;
+}
+
+ul.flashes {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+ul.flashes li {
+    border: 1px solid #f8d7da;
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+ul.flashes li.success {
+    border: 1px solid #d4edda;
+    background-color: #d4edda;
+    color: #155724;
+}
+
+ul.flashes li.error {
+    border: 1px solid #f8d7da;
+    background-color: #f8d7da;
+    color: #721c24;
 }

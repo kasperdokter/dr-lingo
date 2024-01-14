@@ -1,17 +1,18 @@
-import random
+import logging
 import os
-import logging 
+import random
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import (Flask, abort, redirect, render_template, request, session,
+                   url_for, flash)
 
 from models import Pair, db
-
 
 
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.secret_key = os.environ.get('SECRET_KEY')
 
     db.init_app(app)
 
@@ -25,10 +26,27 @@ app = create_app()
 
 app.logger.setLevel(logging.DEBUG)
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        password = request.form.get('password')
+        if password == os.getenv('WEB_PASSWORD'):
+            session['logged_in'] = True
+            return redirect(url_for('index'))
+        else:
+            flash("Incorrect password. Let's hope it is just a typo... 😉", 'error')
+            return redirect(url_for('login'))
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
-    feedback = None
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
 
     # Handle the previous answer
     if request.method == 'POST':
@@ -44,9 +62,9 @@ def index():
 
         # Set the feedback
         if is_correct:
-            feedback = 'Correct!'
+            flash('Correct! 🥰', 'success')
         else:
-            feedback = f'The correct translation of {word_to_translate} is {correct_answer}'
+            flash(f'👎 The correct translation of <em>{word_to_translate}</em> is <em>{correct_answer}</em>', 'error')
 
         # Update the counters
         pair: Pair = Pair.query.get_or_404(int(pair_id))
@@ -102,17 +120,21 @@ def index():
         word_to_translate = random_pair.dutch_word
         correct_answer = random_pair.english_word
 
-    return render_template('game.html', feedback=feedback, word_to_translate=word_to_translate, correct_answer=correct_answer, pair_id=random_pair.id, language=language)
+    return render_template('game.html', word_to_translate=word_to_translate, correct_answer=correct_answer, pair_id=random_pair.id, language=language)
 
 
 @app.route('/words')
 def words():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
     pairs = Pair.query.all()
     return render_template('words.html', pairs=pairs)
 
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
     pair: Pair = Pair.query.get_or_404(id)
     if request.method == 'POST':
         pair.english_word = request.form['english']
@@ -124,6 +146,8 @@ def update(id):
 
 @app.route('/create', methods=['GET', 'POST'])
 def create():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
     if request.method == 'POST':
         new_pair = Pair(
             english_word=request.form['english'],

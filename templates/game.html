@@ -8,10 +8,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>Word Translation Game</h1>
-        {% if feedback %}
-            <p>{{ feedback }}</p>
+        <h1>Dr. Lingo</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class=flashes>
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
         {% endif %}
+        {% endwith %}
         <form action="{{ url_for('index') }}" method="post">
             <p>Translate this word: <strong>{{ word_to_translate }}</strong></p>
             <input type="hidden" name="word_to_translate" value="{{ word_to_translate }}">
@@ -23,6 +29,7 @@
         </form>
         <br>
         <a href="{{ url_for('words') }}">View all words</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
     </div>
 </body>
 </html>
