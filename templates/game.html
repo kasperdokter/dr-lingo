@@ -33,5 +33,10 @@
         <a href="{{ url_for('words') }}">View all words</a>
         <a href="{{ url_for('logout') }}">Logout</a>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelector('input[name="user_answer"]').focus();
+        });
+    </script>
 </body>
 </html>
