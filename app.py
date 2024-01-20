@@ -63,14 +63,13 @@ def index():
         language = data.get('language')
 
         # Check the answer
-        is_correct = data['user_answer'] == data['correct_answer']
+        is_correct = data['user_answer'].lower() == data['correct_answer'].lower()
 
         # Set the feedback
         if is_correct:
             flash('Correct! 🥰', 'success')
         else:
-            flash(
-                f'👎 The correct translation of <em>{word_to_translate}</em> is <em>{correct_answer}</em>', 'error')
+            flash(f'👎 The correct translation of <strong>{word_to_translate}</strong> is <strong>{correct_answer}</strong>', 'error')
 
         # Update the counters
         pair: Pair = Pair.query.get_or_404(int(pair_id))
@@ -142,19 +141,6 @@ def words():
     return render_template('words.html', pairs=pairs)
 
 
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
-def update(id):
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    pair: Pair = Pair.query.get_or_404(id)
-    if request.method == 'POST':
-        pair.english_word = request.form['english']
-        pair.dutch_word = request.form['dutch']
-        db.session.commit()
-        return redirect(url_for('index'))
-    return render_template('update.html', pair=pair)
-
-
 @app.route('/create', methods=['GET', 'POST'])
 def create():
     if not session.get('logged_in'):
@@ -168,6 +154,30 @@ def create():
         db.session.commit()
         return redirect(url_for('index'))
     return render_template('create.html')
+
+
+@app.route('/update/<int:id>', methods=['GET', 'POST'])
+def update(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    pair: Pair = Pair.query.get_or_404(id)
+    if request.method == 'POST':
+        pair.english_word = request.form['english']
+        pair.dutch_word = request.form['dutch']
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('update.html', pair=pair)
+
+
+@app.route('/delete/<int:id>', methods=['GET'])
+def delete(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    pair: Pair = Pair.query.get_or_404(id)
+    if pair:
+        db.session.delete(pair)
+        db.session.commit()
+    return redirect(url_for('words'))
 
 
 def allowed_file(filename):
@@ -196,6 +206,8 @@ def process_file(file):
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_csv():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:

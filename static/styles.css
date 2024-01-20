@@ -40,6 +40,7 @@ a {
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
+    display: inline-block;
 }
 
 @media (min-width: 600px) {
@@ -62,9 +63,10 @@ h1 {
 }
 
 form {
+    margin: 20px 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
 }
 
 form p {
@@ -79,11 +81,19 @@ form input[type="text"] {
     box-sizing: border-box;
 }
 
+form input[type="file"] {
+    margin: 10px 0;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
 form input[type="submit"] {
-    padding: 10px 20px;
-    background-color: #007BFF;
     color: #fff;
+    background-color: #007BFF;
     border: none;
+    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -94,6 +104,19 @@ form input[type="submit"]:hover {
 
 a:hover {
     color: #0056b3;
+}
+
+a.delete {
+    color: #fff; /* white text */
+    background-color: #f00; /* red background */
+    padding: 10px 20px; /* some padding */
+    text-decoration: none; /* remove underline */
+    border-radius: 5px; /* rounded corners */
+    display: inline-block; /* necessary for padding to take effect */
+}
+
+a.delete:hover {
+    background-color: #d00; /* darker red background on hover */
 }
 
 ul.flashes {
@@ -122,4 +145,11 @@ ul.flashes li.error {
     border: 1px solid #f8d7da;
     background-color: #f8d7da;
     color: #721c24;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    font-size: 16px;
 }

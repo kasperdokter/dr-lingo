@@ -5,10 +5,20 @@
     <title>Word Pairs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <a href="{{ url_for('index') }}">Play the Game</a>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class=flashes>
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
         <h1>Word Pairs</h1>
         <table>
             <tr>
@@ -29,9 +39,8 @@
                 <td>{{ pair.dutch_asked_count }}</td>
                 <td>{{ pair.dutch_correct_count }}</td>
                 <td>
-                    <form action="{{ url_for('update', id=pair.id) }}" method="get">
-                        <input type="submit" value="Update">
-                    </form>
+                    <a href="{{ url_for('update', id=pair.id) }}"><i class="fas fa-pen"></i></a>
+                    <a href="{{ url_for('delete', id=pair.id) }}" class="delete"><i class="fas fa-trash"></i></a>
                 </td>
             </tr>
             {% endfor %}
