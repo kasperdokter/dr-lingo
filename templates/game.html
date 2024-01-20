@@ -18,6 +18,7 @@
         </ul>
         {% endif %}
         {% endwith %}
+        {% if has_pairs %}
         <form action="{{ url_for('index') }}" method="post">
             <p>Translate this word: <strong>{{ word_to_translate }}</strong></p>
             <input type="hidden" name="word_to_translate" value="{{ word_to_translate }}">
@@ -28,6 +29,7 @@
             <input type="submit" value="Check Answer">
         </form>
         <br>
+        {% endif %}
         <a href="{{ url_for('words') }}">View all words</a>
         <a href="{{ url_for('logout') }}">Logout</a>
     </div>

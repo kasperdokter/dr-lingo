@@ -37,6 +37,11 @@
             {% endfor %}
         </table>
         <br>
+        <form action="{{ url_for('upload_csv') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv">
+            <input type="submit" value="Upload">
+        </form>
+        <br>
         <a href="{{ url_for('create') }}">Create a New Pair</a>
     </div>
 </body>
