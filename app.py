@@ -59,17 +59,20 @@ def index():
 
         word_to_translate = data.get('word_to_translate')
         correct_answer = data.get('correct_answer')
+        user_answer = data.get('user_answer')
         pair_id = data.get('pair_id')
         language = data.get('language')
 
+        answer_language = 'dutch' if language == 'english' else 'english'
+
         # Check the answer
-        is_correct = data['user_answer'].lower() == data['correct_answer'].lower()
+        is_correct = user_answer.lower() == correct_answer.lower()
 
         # Set the feedback
         if is_correct:
-            flash('Correct! 🥰', 'success')
+            flash('🥰<br><center>Correct!</center>', 'success')
         else:
-            flash(f'👎 The correct translation of <strong>{word_to_translate}</strong> is <strong>{correct_answer}</strong>', 'error')
+            flash(f'👎<br><strong>{word_to_translate}</strong> <br> <p> translates to</p> <p class="speak"><center onclick="speakText(\'{correct_answer}\', \'{answer_language}\')"><strong>{correct_answer}</strong> <i class="fas fa-volume-up"></i></center></p> (and not <em>{user_answer}</em>)', 'error')
 
         # Update the counters
         pair: Pair = Pair.query.get_or_404(int(pair_id))

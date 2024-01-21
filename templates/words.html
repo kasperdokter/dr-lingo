@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
 </head>
 <body>
     <div class="container">
@@ -20,38 +21,29 @@
         {% endif %}
         {% endwith %}
         <h1>Word Pairs</h1>
-        <table>
-            <tr>
-                <th>English Word</th>
-                <th>Dutch Word</th>
-                <th>English Asked Count</th>
-                <th>English Correct Count</th>
-                <th>Dutch Asked Count</th>
-                <th>Dutch Correct Count</th>
-                <th>Actions</th>
-            </tr>
-            {% for pair in pairs %}
-            <tr>
-                <td>{{ pair.english_word }}</td>
-                <td>{{ pair.dutch_word }}</td>
-                <td>{{ pair.english_asked_count }}</td>
-                <td>{{ pair.english_correct_count }}</td>
-                <td>{{ pair.dutch_asked_count }}</td>
-                <td>{{ pair.dutch_correct_count }}</td>
-                <td>
-                    <a href="{{ url_for('update', id=pair.id) }}"><i class="fas fa-pen"></i></a>
-                    <a href="{{ url_for('delete', id=pair.id) }}" class="delete"><i class="fas fa-trash"></i></a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-        <br>
         <form action="{{ url_for('upload_csv') }}" method="post" enctype="multipart/form-data">
             <input type="file" name="file" accept=".csv">
             <input type="submit" value="Upload">
         </form>
         <br>
         <a href="{{ url_for('create') }}">Create a New Pair</a>
+        <br>
+        <table>
+            <tr>
+                <th><span class="flag-icon flag-icon-gb"></span></th>
+                <th><span class="flag-icon flag-icon-nl"></span></th>
+                <th></th>
+            </tr>
+            {% for pair in pairs %}
+            <tr>
+                <td>{{ pair.english_word }}</td>
+                <td>{{ pair.dutch_word }}</td>
+                <td>
+                    <a href="{{ url_for('update', id=pair.id) }}"><i class="fas fa-pen"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 </body>
 </html>

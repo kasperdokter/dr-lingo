@@ -2,13 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Word Translation Game</title>
+    <title>Dr. Lingo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    <script>
+        function speakText(text, language) {
+            var utterance = new SpeechSynthesisUtterance(text);
+            if (language == 'english') {
+                utterance.lang = "en-GB";
+            } else if (language == 'dutch') {
+                utterance.lang = "nl-NL";
+            }
+            window.speechSynthesis.speak(utterance);
+        };
+    </script>
 </head>
 <body>
     <div class="container">
-        <h1>Dr. Lingo</h1>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.png') }}">
+        </div>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <ul class=flashes>
@@ -20,12 +35,39 @@
         {% endwith %}
         {% if has_pairs %}
         <form action="{{ url_for('index') }}" method="post">
-            <p>Translate this word: <strong>{{ word_to_translate }}</strong></p>
+            <table>
+                <tr>
+                    <td width="2em">
+                        {% if language == 'english' %}
+                        <span class="flag-icon flag-icon-gb"></span>
+                        {% elif language == 'dutch' %}
+                        <span class="flag-icon flag-icon-nl"></span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <p id="speak" class="speak">
+                            <strong>{{ word_to_translate }}</strong>
+                            <i class="fas fa-volume-up"></i>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% if language == 'dutch' %}
+                        <span class="flag-icon flag-icon-gb"></span>
+                        {% elif language == 'english' %}
+                        <span class="flag-icon flag-icon-nl"></span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <input type="text" name="user_answer" class="user_answer" autocomplete="off">
+                    </td>
+                </tr>
+            </table> 
             <input type="hidden" name="word_to_translate" value="{{ word_to_translate }}">
             <input type="hidden" name="correct_answer" value="{{ correct_answer }}">
             <input type="hidden" name="pair_id" value="{{ pair_id }}">
             <input type="hidden" name="language" value="{{ language }}">
-            <input type="text" name="user_answer" autocomplete="off" autofocus>
             <input type="submit" value="Check Answer">
         </form>
         <br>
@@ -34,8 +76,22 @@
         <a href="{{ url_for('logout') }}">Logout</a>
     </div>
     <script>
+        function speakText(text, language) {
+            var utterance = new SpeechSynthesisUtterance(text);
+            if (language == 'english') {
+                utterance.lang = "en-GB";
+            } else if (language == 'dutch') {
+                utterance.lang = "nl-NL";
+            }
+            window.speechSynthesis.speak(utterance);
+        };
+
         document.addEventListener('DOMContentLoaded', (event) => {
             document.querySelector('input[name="user_answer"]').focus();
+        });
+
+        document.getElementById('speak').addEventListener('click', function() {
+            speakText('{{ word_to_translate }}', '{{ language }}');
         });
     </script>
 </body>
