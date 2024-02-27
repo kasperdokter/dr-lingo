@@ -39,3 +39,4 @@ services:
       - "traefik.http.services.drlingo-web.loadbalancer.server.port=5000"
 volumes:
   dbdata:
+  pgadmin-data:
