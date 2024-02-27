@@ -19,7 +19,7 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.drlingo-pgadmin4.rule=Host(`drlingo.alefka.nl`) && PathPrefix(`/pgadmin4/`)"
+      - "traefik.http.routers.drlingo-pgadmin4.rule=Host(`${HOSTNAME}`) && PathPrefix(`/pgadmin4/`)"
       - "traefik.http.routers.drlingo-pgadmin4.entrypoints=websecure"
       - "traefik.http.routers.drlingo-pgadmin4.tls.certresolver=myresolver"
       - "traefik.http.services.drlingo-pgadmin4.loadbalancer.server.port=80" 
@@ -33,7 +33,7 @@ services:
       WEB_PASSWORD: ${WEB_PASSWORD}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.drlingo-web.rule=Host(`drlingo.alefka.nl`)"
+      - "traefik.http.routers.drlingo-web.rule=Host(`${HOSTNAME}`)"
       - "traefik.http.routers.drlingo-web.entrypoints=websecure"
       - "traefik.http.routers.drlingo-web.tls.certresolver=myresolver"
       - "traefik.http.services.drlingo-web.loadbalancer.server.port=5000"
